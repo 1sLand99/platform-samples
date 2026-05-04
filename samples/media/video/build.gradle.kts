@@ -27,16 +27,29 @@ android {
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 35
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
     }
 
-    viewBinding.isEnabled = true
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     androidResources {
         noCompress += "tflite"
+    }
+    lint {
+        targetSdk = 35
+    }
+    testOptions {
+        targetSdk = 35
     }
 }
 

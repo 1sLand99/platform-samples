@@ -16,6 +16,7 @@
 
 package com.example.platform.ui.live_updates
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
@@ -25,6 +26,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.SpannableStringBuilder
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
@@ -51,9 +53,20 @@ object SnackbarNotificationManager {
         INITIALIZING(5000) {
             @RequiresApi(Build.VERSION_CODES.BAKLAVA)
             override fun buildNotification(): NotificationCompat.Builder {
+                val orderText = "Your order is being placed"
                 return buildBaseNotification(appContext, INITIALIZING)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("You order is being placed")
+                    .setContentTitle(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
+                            SpannableStringBuilder().append(
+                                orderText,
+                                Notification.createSemanticStyleAnnotation(Notification.SEMANTIC_STYLE_INFO),
+                                0,
+                            )
+                        } else {
+                            orderText
+                        },
+                    )
                     .setContentText("Confirming with bakery...")
                     .setShortCriticalText("Placing")
                     .setStyle(buildBaseProgressStyle(INITIALIZING).setProgressIndeterminate(true))
